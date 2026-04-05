@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title="Home">
   <div class="hero">
     <img
       class="profile-img"
-      src="/tao.jpg"
+      src={`${base}/tao.jpg`}
       alt="Tao Yang"
       onerror="this.style.background='#ddd';this.removeAttribute('src')"
     />
@@ -16,10 +17,10 @@ import Layout from '../layouts/Layout.astro';
 
       <p>
         Hi! My name is Tao (pronounced tay-oh
-        <audio id="player"><source src="/audio/tao.mp3" type="audio/mpeg" /></audio>
+        <audio id="player"><source src={`${base}/audio/tao.mp3`} type="audio/mpeg" /></audio>
         <button class="play-btn" onclick="document.getElementById('player').play()" aria-label="Play pronunciation">🔊 play</button>).
         I am a Chinese-American immigrant and became a citizen the day after President Obama got elected.
-        I was a CollegeHumor cast member and wrote and starred in dozens of videos which you can see <a href="/videos">here</a>.!
+        I was a CollegeHumor cast member and wrote and starred in dozens of videos which you can see <a href={`${base}/videos`}>here</a>.!
       </p>
 
       <p>

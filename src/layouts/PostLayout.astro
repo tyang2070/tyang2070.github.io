@@ -1,0 +1,67 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    date: string;
+    tags?: string[];
+  };
+}
+
+const { frontmatter } = Astro.props;
+
+const dateFormatted = new Date(frontmatter.date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout title={frontmatter.title}>
+  <article>
+    <h1>{frontmatter.title}</h1>
+    <p class="post-meta">{dateFormatted}</p>
+    {frontmatter.tags && (
+      <p class="post-tags">
+        {frontmatter.tags.map((tag: string) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </p>
+    )}
+    <div class="post-body">
+      <slot />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .post-meta {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-tags {
+    margin-bottom: 1.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #f0f0f0;
+    color: #555;
+    font-size: 0.78rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    margin-right: 0.4rem;
+  }
+
+  .post-body {
+    margin-top: 1.5rem;
+    line-height: 1.8;
+  }
+
+  .post-body p {
+    margin-bottom: 1rem;
+  }
+</style>

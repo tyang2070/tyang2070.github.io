@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Home">
+  <div class="hero">
+    <img
+      class="profile-img"
+      src="/tao.jpg"
+      alt="Tao Yang"
+      onerror="this.style.background='#ddd';this.removeAttribute('src')"
+    />
+
+    <div class="bio">
+      <h1>🌴 L.A. based comedy writer and actor. 🌴</h1>
+
+      <p>
+        Hi! My name is Tao (pronounced tay-oh
+        <audio id="player"><source src="/audio/tao.mp3" type="audio/mpeg" /></audio>
+        <button class="play-btn" onclick="document.getElementById('player').play()" aria-label="Play pronunciation">🔊 play</button>).
+        I am a Chinese-American immigrant and became a citizen the day after President Obama got elected.
+        I was a CollegeHumor cast member and wrote and starred in dozens of videos which you can see <a href="/videos">here</a>.!
+      </p>
+
+      <p>
+        I have years of sketch writing experience both online and on stage. I write comedy that is both
+        incredibly stupid with strong points of view like this video about how{' '}
+        <a href="https://youtu.be/5T35KaUxiSU" target="_blank" rel="noopener">corporate ice-breakers are stupid</a>.
+      </p>
+
+      <p>
+        I'm also on the Upright Citizen's Brigade house improv team,{' '}
+        <em><a href="https://ucbcomedy.com/user/42774" target="_blank" rel="noopener">Jetset</a></em>,
+        which you can see either Monday, Thursday, or Friday nights at UCB in LA.
+      </p>
+
+      <p>
+        Prior to L.A., I was a writer on a house sketch team (aka Maude Night) at the Upright Citizen's Brigade in NYC.
+      </p>
+
+      <p>
+        I also have life experience outside of comedy! I've had a whole other career as a Data Scientist
+        (translation: programmer + stats) and have worked at data-driven organizations like Backstage,
+        Grubhub/Seamless, and tumblr. I even coded the pixels that you're looking at right now with
+        just my bare hands and a hammer.
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .hero {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .profile-img {
+    width: 320px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: #ddd;
+  }
+
+  .play-btn {
+    display: inline;
+    background: none;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: #1a0dab;
+    vertical-align: middle;
+  }
+
+  .play-btn:hover {
+    background: #f0f0f0;
+    border-color: #666;
+  }
+
+  .bio h1 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .bio p {
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      flex-direction: column;
+    }
+
+    .profile-img {
+      width: 100%;
+    }
+  }
+</style>

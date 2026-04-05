@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const posts = [
+  {
+    slug: 'why-a-blog',
+    title: 'Why a Blog?',
+    date: 'September 21, 2019',
+  },
+];
+---
+
+<Layout title="Blog">
+  <h1>Posts</h1>
+
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <span class="post-date">{post.date}</span>
+        <a href={`/posts/${post.slug}`}>{post.title}</a>
+      </li>
+    ))}
+  </ul>
+</Layout>

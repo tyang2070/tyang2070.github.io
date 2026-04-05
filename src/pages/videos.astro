@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const writing = [
+  { title: 'Juul CEO - No More Advertising To Kids', id: '2POq39ce_5I' },
+];
+
+const writingActing = [
+  { title: "Don't Start a Twitch Stream", id: 'tDpMboaONuE' },
+  { title: 'You Created A Fictional Language For A Sketch?', id: 'CPe7tXfVIVI' },
+  { title: 'Class President Needed for One Last Job', id: 'AXiKlkQMass' },
+  { title: "When Your Favorite Old Shows Don't Hold Up", id: 'ImYFrKPHinI' },
+  { title: 'High Stakes Icebreakers', id: '5T35KaUxiSU' },
+  { title: "What's Wrong With Being 'Whipped'?", id: 'bXp1iUf753o' },
+  { title: 'You Suck In Your Own Story', id: 'JsUo21K6rzM' },
+  { title: 'Which Book Should Trigger Our Secret Door?', id: '4RsgcAuWbP8' },
+];
+
+const acting = [
+  { title: "Don't Correct Me if You're Wrong", id: 'BoTiGNtG244' },
+  { title: 'Breaking News', id: 'qtkuWMPi9dE' },
+  { title: 'Breaking News', id: 'IgX0KoJPwwg' },
+  { title: 'I Overshared So Now You Have To', id: 'x7MA-XeXZt0' },
+  { title: "You Can't Catch a Cold In The Summer", id: 'wByqVoXr-Xg' },
+  { title: "No One Cares About Your Major", id: 'XzLAjmTi4Sc' },
+  { title: 'The Game of Thrones Finale Rewritten with A.I.', id: 'RNFpGU0TODw' },
+  { title: 'Letting Go of Game of Thrones', id: 'neIFYT0mmTQ' },
+  { title: "Everyone's A Republican on Tax Day", id: 'wt5FJtQ0ffo' },
+  { title: 'Bringing the Worst Thing to a Potluck', id: 'aMi3V-raaVQ' },
+  { title: 'When Theater Kids Grow Up', id: 'OD4mEbRGRXU' },
+];
+---
+
+<Layout title="Videos">
+  <h1>Videos</h1>
+
+  <h2>Writing</h2>
+  {writing.map((v) => (
+    <div class="video-item">
+      <h3>{v.title}</h3>
+      <div class="video-wrap">
+        <iframe
+          src={`https://www.youtube.com/embed/${v.id}`}
+          title={v.title}
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  ))}
+
+  <h2>Writing / Acting</h2>
+  {writingActing.map((v) => (
+    <div class="video-item">
+      <h3>{v.title}</h3>
+      <div class="video-wrap">
+        <iframe
+          src={`https://www.youtube.com/embed/${v.id}`}
+          title={v.title}
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  ))}
+
+  <h2>Acting</h2>
+  {acting.map((v) => (
+    <div class="video-item">
+      <h3>{v.title}</h3>
+      <div class="video-wrap">
+        <iframe
+          src={`https://www.youtube.com/embed/${v.id}`}
+          title={v.title}
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  ))}
+</Layout>
+
+<style>
+  .video-item {
+    margin-bottom: 2.5rem;
+  }
+
+  .video-item h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+  }
+
+  .video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 6px;
+  }
+</style>

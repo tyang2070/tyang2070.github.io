@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title="Contact">
@@ -7,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
 
   <img
     class="soup-img"
-    src="/tao_soup.jpg"
+    src={`${base}/tao_soup.jpg`}
     alt="A bowl of soup"
     onerror="this.style.display='none'"
   />

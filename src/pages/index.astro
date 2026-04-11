@@ -50,9 +50,23 @@ const photos = readdirSync(galleryDir)
   let current = 0;
 
   window.movePhoto = function(dir) {
+    const img = document.getElementById('gallery-img');
     current = (current + dir + photos.length) % photos.length;
-    document.getElementById('gallery-img').src = photos[current].src;
-    document.getElementById('gallery-img').alt = photos[current].alt;
+
+    img.style.transition = 'none';
+    img.style.transform = `translateX(${dir > 0 ? '60px' : '-60px'})`;
+    img.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        img.src = photos[current].src;
+        img.alt = photos[current].alt;
+        img.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        img.style.transform = 'translateX(0)';
+        img.style.opacity = '1';
+      });
+    });
+
     const counter = document.getElementById('gallery-counter');
     if (counter) counter.textContent = `${current + 1} / ${photos.length}`;
     document.getElementById('gallery-open').href = photos[current].src;
@@ -77,6 +91,7 @@ const photos = readdirSync(galleryDir)
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
   }
 
   .profile-img {

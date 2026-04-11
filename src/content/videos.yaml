@@ -1,3 +1,5 @@
+
+
 - section: Writing / Acting
   videos:
     - title: Smartypants - Charcuterie Tier List
@@ -25,6 +27,10 @@
 
 - section: Acting
   videos:
+    - title: Secret Lair - The Office
+      src: /videos/secret_lair.mp4
+      thumbnail: /videos/secret_lair.png   # optional, falls back to a ▶ placeholder
+      caption: Branded video for Secret Lair - The Office launch.
     - title: Don't Correct Me if You're Wrong
       id: BoTiGNtG244
     - title: Breaking News

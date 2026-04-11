@@ -11,6 +11,17 @@ const photos = [
 
 <Layout title="Home">
   <div class="hero">
+    <div class="gallery-col">
+      <img id="gallery-img" src={photos[0].src} alt={photos[0].alt} class="profile-img" />
+      {photos.length > 1 && (
+        <div class="gallery-controls">
+          <button onclick="movePhoto(-1)" aria-label="Previous">‹</button>
+          <span id="gallery-counter">1 / {photos.length}</span>
+          <button onclick="movePhoto(1)" aria-label="Next">›</button>
+        </div>
+      )}
+    </div>
+
     <div class="bio">
       <h1>🌴 L.A. based comedy writer and actor. 🌴</h1>
 
@@ -46,52 +57,20 @@ const photos = [
       </p>
     </div>
   </div>
-
-  <!-- Gallery -->
-  <div class="gallery">
-    {photos.map((photo, i) => (
-      <button class="gallery-thumb" onclick={`openLightbox(${i})`} aria-label={photo.alt}>
-        <img src={photo.src} alt={photo.alt} loading="lazy" />
-      </button>
-    ))}
-  </div>
-
-  <!-- Lightbox -->
-  <dialog id="lightbox" onclick="closeLightbox()">
-    <button class="lb-close" onclick="closeLightbox()" aria-label="Close">✕</button>
-    <button class="lb-prev" onclick="event.stopPropagation(); movePhoto(-1)" aria-label="Previous">‹</button>
-    <img id="lb-img" src="" alt="" onclick="event.stopPropagation()" />
-    <button class="lb-next" onclick="event.stopPropagation(); movePhoto(1)" aria-label="Next">›</button>
-  </dialog>
 </Layout>
 
 <script define:vars={{ photos }}>
   let current = 0;
 
-  window.openLightbox = function(index) {
-    current = index;
-    const dialog = document.getElementById('lightbox');
-    const img = document.getElementById('lb-img');
-    img.src = photos[current].src;
-    img.alt = photos[current].alt;
-    dialog.showModal();
-  };
-
-  window.closeLightbox = function() {
-    document.getElementById('lightbox').close();
-  };
-
   window.movePhoto = function(dir) {
     current = (current + dir + photos.length) % photos.length;
-    const img = document.getElementById('lb-img');
-    img.src = photos[current].src;
-    img.alt = photos[current].alt;
+    document.getElementById('gallery-img').src = photos[current].src;
+    document.getElementById('gallery-img').alt = photos[current].alt;
+    const counter = document.getElementById('gallery-counter');
+    if (counter) counter.textContent = `${current + 1} / ${photos.length}`;
   };
 
   document.addEventListener('keydown', (e) => {
-    const dialog = document.getElementById('lightbox');
-    if (!dialog.open) return;
-    if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') movePhoto(-1);
     if (e.key === 'ArrowRight') movePhoto(1);
   });
@@ -99,7 +78,46 @@ const photos = [
 
 <style>
   .hero {
-    margin-bottom: 2.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .gallery-col {
+    flex-shrink: 0;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-img {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .gallery-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    color: #888;
+  }
+
+  .gallery-controls button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #555;
+    padding: 0 0.1rem;
+    line-height: 1;
+  }
+
+  .gallery-controls button:hover {
+    color: #000;
   }
 
   .play-btn {
@@ -128,99 +146,13 @@ const photos = [
     margin-bottom: 1rem;
   }
 
-  /* Gallery grid */
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.75rem;
-  }
-
-  .gallery-thumb {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    overflow: hidden;
-    border-radius: 6px;
-    aspect-ratio: 1;
-  }
-
-  .gallery-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.2s ease;
-  }
-
-  .gallery-thumb:hover img {
-    transform: scale(1.04);
-  }
-
-  /* Lightbox */
-  dialog {
-    background: rgba(0, 0, 0, 0.92);
-    border: none;
-    padding: 0;
-    max-width: 100vw;
-    max-height: 100vh;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  dialog::backdrop {
-    background: transparent;
-  }
-
-  dialog[open] {
-    display: flex;
-  }
-
-  #lb-img {
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-    border-radius: 4px;
-  }
-
-  .lb-close {
-    position: fixed;
-    top: 1rem;
-    right: 1.25rem;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.75rem;
-    cursor: pointer;
-    line-height: 1;
-    z-index: 10;
-  }
-
-  .lb-prev, .lb-next {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 3rem;
-    cursor: pointer;
-    padding: 0 1rem;
-    line-height: 1;
-    z-index: 10;
-    opacity: 0.7;
-  }
-
-  .lb-prev:hover, .lb-next:hover { opacity: 1; }
-  .lb-prev { left: 0.5rem; }
-  .lb-next { right: 0.5rem; }
-
   @media (max-width: 600px) {
-    .gallery {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    .hero {
+      flex-direction: column;
+    }
+
+    .gallery-col {
+      width: 100%;
     }
   }
 </style>

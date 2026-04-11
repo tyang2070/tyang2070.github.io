@@ -35,6 +35,12 @@ function isActive(path: string) {
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-EJYH8L3WBS');
+
+      if (document.referrer) {
+        gtag('event', 'referrer', {
+          full_referrer: document.referrer,
+        });
+      }
     </script>
   </head>
   <body>

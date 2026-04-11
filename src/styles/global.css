@@ -100,6 +100,7 @@ footer {
   gap: 1.25rem;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 footer a {

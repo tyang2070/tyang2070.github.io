@@ -1,9 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { marked } from 'marked';
-import { readFileSync } from 'fs';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -28,19 +27,19 @@ const photos = readdirSync(galleryDir)
         {photos.length > 1 && <button onclick="movePhoto(-1)" aria-label="Previous">‹</button>}
         {photos.length > 1 && <span id="gallery-counter">1 / {photos.length}</span>}
         {photos.length > 1 && <button onclick="movePhoto(1)" aria-label="Next">›</button>}
-        <a id="gallery-open" href={photos[0].src} target="_blank" rel="noopener" aria-label="Open full size" title="Open full size">⤢</a>
+        <a id="gallery-open" href={photos[0].src} target="_blank" rel="noopener" title="Open full size">⤢</a>
       </div>
     </div>
 
     <div class="bio">
-      <h1>🌴 L.A. based comedy writer and actor. 🌴</h1>
-
-      <p>
+      <p class="eyebrow">Comedy writer & actor · Los Angeles</p>
+      <h1>Tao Yang</h1>
+      <div class="divider"></div>
+      <p class="pronounce">
         Hi! My name is Tao (pronounced tay-oh
         <audio id="player"><source src={`${base}/audio/tao.mp3`} type="audio/mpeg" /></audio>
-        <button class="play-btn" onclick="document.getElementById('player').play()" aria-label="Play pronunciation">🔊 play</button>).
+        <button class="play-btn" onclick="document.getElementById('player').play()" aria-label="Play">🔊</button>).
       </p>
-
       <div class="bio-content" set:html={bioHtml} />
     </div>
   </div>
@@ -81,22 +80,19 @@ const photos = readdirSync(galleryDir)
 <style>
   .hero {
     display: flex;
-    gap: 2rem;
+    gap: 4rem;
     align-items: flex-start;
   }
 
   .gallery-col {
     flex-shrink: 0;
     width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     overflow: hidden;
   }
 
   .profile-img {
     width: 100%;
-    border-radius: 8px;
+    border-radius: 4px;
     display: block;
   }
 
@@ -104,9 +100,9 @@ const photos = readdirSync(galleryDir)
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: #888;
+    margin-top: 0.6rem;
+    color: #aaa;
+    font-size: 0.82rem;
   }
 
   .gallery-controls button {
@@ -114,60 +110,75 @@ const photos = readdirSync(galleryDir)
     border: none;
     font-size: 1.3rem;
     cursor: pointer;
-    color: #555;
-    padding: 0 0.1rem;
+    color: #aaa;
+    padding: 0;
     line-height: 1;
+    transition: color 0.2s;
   }
 
-  .gallery-controls button:hover {
-    color: #000;
-  }
+  .gallery-controls button:hover { color: #1a1a1a; }
 
   .gallery-controls a {
-    color: #555;
+    color: #aaa;
     font-size: 1.1rem;
     text-decoration: none;
-    line-height: 1;
-    margin-left: 0.3rem;
+    margin-left: 0.25rem;
+    transition: color 0.2s;
   }
 
-  .gallery-controls a:hover {
-    color: #000;
-  }
+  .gallery-controls a:hover { color: #1a1a1a; }
 
-  .play-btn {
-    display: inline;
-    background: none;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    padding: 0.1rem 0.4rem;
-    font-size: 0.85rem;
-    cursor: pointer;
-    color: #1a0dab;
-    vertical-align: middle;
-  }
-
-  .play-btn:hover {
-    background: #f0f0f0;
-    border-color: #666;
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 0.6rem;
+    font-family: 'Lora', serif;
   }
 
   .bio h1 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 0;
+    color: #1a1a1a;
   }
 
-  .bio p, .bio-content p {
-    margin-bottom: 1rem;
+  .divider {
+    width: 40px;
+    height: 2px;
+    background: #c4b49a;
+    margin: 1.5rem 0;
   }
 
-  @media (max-width: 600px) {
-    .hero {
-      flex-direction: column;
-    }
+  .pronounce {
+    font-size: 0.95rem;
+    color: #777;
+    margin-bottom: 1.25rem;
+  }
 
-    .gallery-col {
-      width: 100%;
-    }
+  .play-btn {
+    background: none;
+    border: 1px solid #d9d0c0;
+    border-radius: 3px;
+    padding: 0.05rem 0.35rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #777;
+    vertical-align: middle;
+    transition: border-color 0.2s;
+  }
+
+  .play-btn:hover { border-color: #aaa; }
+
+  .bio-content p {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  @media (max-width: 860px) {
+    .hero { flex-direction: column; gap: 2rem; }
+    .gallery-col { width: 100%; }
+    .bio h1 { font-size: 2.5rem; }
   }
 </style>

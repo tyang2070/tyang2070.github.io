@@ -1,110 +1,222 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import yaml from 'js-yaml';
 
-const writing = [
-  { title: 'Juul CEO - No More Advertising To Kids', id: '2POq39ce_5I' },
-];
-
-const writingActing = [
-  { title: "Don't Start a Twitch Stream", id: 'tDpMboaONuE' },
-  { title: 'You Created A Fictional Language For A Sketch?', id: 'CPe7tXfVIVI' },
-  { title: 'Class President Needed for One Last Job', id: 'AXiKlkQMass' },
-  { title: "When Your Favorite Old Shows Don't Hold Up", id: 'ImYFrKPHinI' },
-  { title: 'High Stakes Icebreakers', id: '5T35KaUxiSU' },
-  { title: "What's Wrong With Being 'Whipped'?", id: 'bXp1iUf753o' },
-  { title: 'You Suck In Your Own Story', id: 'JsUo21K6rzM' },
-  { title: 'Which Book Should Trigger Our Secret Door?', id: '4RsgcAuWbP8' },
-];
-
-const acting = [
-  { title: "Don't Correct Me if You're Wrong", id: 'BoTiGNtG244' },
-  { title: 'Breaking News', id: 'qtkuWMPi9dE' },
-  { title: 'Breaking News', id: 'IgX0KoJPwwg' },
-  { title: 'I Overshared So Now You Have To', id: 'x7MA-XeXZt0' },
-  { title: "You Can't Catch a Cold In The Summer", id: 'wByqVoXr-Xg' },
-  { title: "No One Cares About Your Major", id: 'XzLAjmTi4Sc' },
-  { title: 'The Game of Thrones Finale Rewritten with A.I.', id: 'RNFpGU0TODw' },
-  { title: 'Letting Go of Game of Thrones', id: 'neIFYT0mmTQ' },
-  { title: "Everyone's A Republican on Tax Day", id: 'wt5FJtQ0ffo' },
-  { title: 'Bringing the Worst Thing to a Potluck', id: 'aMi3V-raaVQ' },
-  { title: 'When Theater Kids Grow Up', id: 'OD4mEbRGRXU' },
-];
+const raw = readFileSync(join(process.cwd(), 'src/content/videos.yaml'), 'utf-8');
+const sections = yaml.load(raw) as { section: string; videos: { title: string; id: string }[] }[];
 ---
 
 <Layout title="Videos">
   <h1>Videos</h1>
 
-  <h2>Writing</h2>
-  {writing.map((v) => (
-    <div class="video-item">
-      <h3>{v.title}</h3>
-      <div class="video-wrap">
-        <iframe
-          src={`https://www.youtube.com/embed/${v.id}`}
-          title={v.title}
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
+  {sections.map(section => (
+    <section class="video-section">
+      <h2>{section.section}</h2>
+      <div class="grid">
+        {section.videos.map(v => (
+          <button class="card" onclick={`openVideo('${v.id}', \`${v.title}\`)`}>
+            <div class="thumb-wrap">
+              <img
+                src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`}
+                alt={v.title}
+                loading="lazy"
+              />
+              <div class="play-icon">▶</div>
+            </div>
+            <p class="card-title">{v.title}</p>
+          </button>
+        ))}
       </div>
-    </div>
+    </section>
   ))}
 
-  <h2>Writing / Acting</h2>
-  {writingActing.map((v) => (
-    <div class="video-item">
-      <h3>{v.title}</h3>
+  <!-- Modal -->
+  <dialog id="video-modal" onclick="handleModalClick(event)">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span id="modal-title"></span>
+        <button class="modal-close" onclick="closeVideo()" aria-label="Close">✕</button>
+      </div>
       <div class="video-wrap">
         <iframe
-          src={`https://www.youtube.com/embed/${v.id}`}
-          title={v.title}
+          id="modal-iframe"
+          src=""
+          title="YouTube video"
           allowfullscreen
-          loading="lazy"
+          allow="autoplay"
         ></iframe>
       </div>
     </div>
-  ))}
-
-  <h2>Acting</h2>
-  {acting.map((v) => (
-    <div class="video-item">
-      <h3>{v.title}</h3>
-      <div class="video-wrap">
-        <iframe
-          src={`https://www.youtube.com/embed/${v.id}`}
-          title={v.title}
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
-      </div>
-    </div>
-  ))}
+  </dialog>
 </Layout>
 
+<script>
+  window.openVideo = function(id: string, title: string) {
+    const modal = document.getElementById('video-modal') as HTMLDialogElement;
+    const iframe = document.getElementById('modal-iframe') as HTMLIFrameElement;
+    const titleEl = document.getElementById('modal-title')!;
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+    titleEl.textContent = title;
+    modal.showModal();
+  };
+
+  window.closeVideo = function() {
+    const modal = document.getElementById('video-modal') as HTMLDialogElement;
+    const iframe = document.getElementById('modal-iframe') as HTMLIFrameElement;
+    iframe.src = '';
+    modal.close();
+  };
+
+  window.handleModalClick = function(e: MouseEvent) {
+    closeVideo();
+  };
+
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('video-modal') as HTMLDialogElement;
+    if (e.key === 'Escape' && modal.open) closeVideo();
+  });
+</script>
+
 <style>
-  .video-item {
-    margin-bottom: 2.5rem;
+  h1 { margin-bottom: 2rem; }
+
+  .video-section { margin-bottom: 3rem; }
+
+  .video-section h2 {
+    margin-bottom: 1.25rem;
+    margin-top: 0;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #aaa;
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    border-bottom: 1px solid #d9d0c0;
+    padding-bottom: 0.5rem;
   }
 
-  .video-item h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .thumb-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #e8e0d4;
+  }
+
+  .thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .play-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #fff;
+    opacity: 0;
+    background: rgba(0,0,0,0.3);
+    transition: opacity 0.2s ease;
+  }
+
+  .card:hover .thumb-wrap img { transform: scale(1.04); }
+  .card:hover .play-icon { opacity: 1; }
+
+  .card-title {
+    margin: 0.5rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
     color: #333;
   }
+
+  /* Modal */
+  dialog {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  dialog::backdrop {
+    background: rgba(20, 15, 10, 0.85);
+    backdrop-filter: blur(4px);
+  }
+
+  dialog:not([open]) { display: none; }
+
+  .modal-inner {
+    width: min(860px, 92vw);
+    background: #1a1510;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: #ccc;
+    font-size: 0.88rem;
+    font-family: 'Lora', serif;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.2rem;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover { color: #fff; }
 
   .video-wrap {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
   }
 
   .video-wrap iframe {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: 0;
-    border-radius: 6px;
+  }
+
+  @media (max-width: 500px) {
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   }
 </style>

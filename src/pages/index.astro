@@ -19,13 +19,12 @@ const photos = readdirSync(galleryDir)
   <div class="hero">
     <div class="gallery-col">
       <img id="gallery-img" src={photos[0].src} alt={photos[0].alt} class="profile-img" />
-      {photos.length > 1 && (
-        <div class="gallery-controls">
-          <button onclick="movePhoto(-1)" aria-label="Previous">‹</button>
-          <span id="gallery-counter">1 / {photos.length}</span>
-          <button onclick="movePhoto(1)" aria-label="Next">›</button>
-        </div>
-      )}
+      <div class="gallery-controls">
+        {photos.length > 1 && <button onclick="movePhoto(-1)" aria-label="Previous">‹</button>}
+        {photos.length > 1 && <span id="gallery-counter">1 / {photos.length}</span>}
+        {photos.length > 1 && <button onclick="movePhoto(1)" aria-label="Next">›</button>}
+        <a id="gallery-open" href={photos[0].src} target="_blank" rel="noopener" aria-label="Open full size" title="Open full size">⤢</a>
+      </div>
     </div>
 
     <div class="bio">
@@ -74,6 +73,7 @@ const photos = readdirSync(galleryDir)
     document.getElementById('gallery-img').alt = photos[current].alt;
     const counter = document.getElementById('gallery-counter');
     if (counter) counter.textContent = `${current + 1} / ${photos.length}`;
+    document.getElementById('gallery-open').href = photos[current].src;
   };
 
   document.addEventListener('keydown', (e) => {
@@ -123,6 +123,18 @@ const photos = readdirSync(galleryDir)
   }
 
   .gallery-controls button:hover {
+    color: #000;
+  }
+
+  .gallery-controls a {
+    color: #555;
+    font-size: 0.9rem;
+    text-decoration: none;
+    line-height: 1;
+    margin-left: 0.3rem;
+  }
+
+  .gallery-controls a:hover {
     color: #000;
   }
 
